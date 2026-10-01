@@ -1,331 +1,806 @@
+<!DOCTYPE html>  <html lang="fr">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>MADA MISSION 🇲🇬</title>  <style>  
+*{box-sizing:border-box}  
+body{  
+  margin:0;  
+  font-family:Arial,sans-serif;  
+  background:#eef2f7;  
+  color:#172033;  
+}  
+header{  
+  background:#111827;  
+  color:white;  
+  padding:18px;  
+  text-align:center;  
+  font-size:23px;  
+  font-weight:bold;  
+}  
+.container{  
+  max-width:600px;  
+  margin:auto;  
+  padding:15px;  
+}  
+.card{  
+  background:white;  
+  border-radius:16px;  
+  padding:18px;  
+  margin-bottom:15px;  
+  box-shadow:0 4px 14px #0001;  
+}  
+input,select,button{  
+  width:100%;  
+  padding:13px;  
+  margin-top:9px;  
+  border-radius:10px;  
+  border:1px solid #ccd3dd;  
+  font-size:16px;  
+}  
+button{  
+  background:#111827;  
+  color:white;  
+  border:none;  
+  font-weight:bold;  
+}  
+button:disabled{  
+  background:#999;  
+}  
+.hidden{display:none}  
+.balance{  
+  font-size:30px;  
+  font-weight:bold;  
+  text-align:center;  
+  margin:10px 0;  
+}  
+.mission{  
+  border:1px solid #ddd;  
+  padding:15px;  
+  border-radius:13px;  
+  margin-top:12px;  
+}  
+.reward{  
+  font-weight:bold;  
+  margin-top:8px;  
+}  
+.timer{  
+  text-align:center;  
+  font-size:30px;  
+  font-weight:bold;  
+  margin:12px;  
+}  
+.status{  
+  padding:8px;  
+  border-radius:8px;  
+  background:#eee;  
+  margin-top:8px;  
+}  
+.small{  
+  color:#667085;  
+  font-size:14px;  
+}  
+hr{  
+  border:0;  
+  border-top:1px solid #eee;  
+  margin:15px 0;  
+}  
+</style>  </head>  <body>  <header>🇲🇬 MADA MISSION</header>  <div class="container">  <!-- LOGIN -->  <div id="loginPage">    <div class="card">  
+    <h2>Connexion</h2>  <input id="loginUsername" placeholder="Nom d'utilisateur">  
+<input id="loginPassword" type="password" placeholder="Mot de passe">  
 
-  border-radius:12px;
-  margin-bottom:20px;
-}
+<button onclick="login()">Se connecter</button>  
 
-.card{
-  background:#202c35;
-  padding:20px;
-  border-radius:18px;
-}
+<p id="loginMsg"></p>  
 
-button{
-  width:100%;
-  padding:15px;
-  margin:8px 0;
-  border:none;
-  border-radius:12px;
-  font-size:17px;
-  font-weight:bold;
-}
+<hr>  
 
-.start{
-  background:#00b86b;
-  color:white;
-}
+<h3>Créer un compte</h3>  
 
-.answer{
-  background:#354451;
-  color:white;
-}
+<input id="regUsername" placeholder="Nom d'utilisateur">  
+<input id="regPassword" type="password" placeholder="Mot de passe">  
 
-.answer:active{
-  transform:scale(.98);
-}
+<button onclick="register()">Créer mon compte</button>  
 
-#timer{
-  font-size:30px;
-  color:#ffd000;
-  margin:10px;
-}
+<p id="regMsg"></p>
 
-#message{
-  min-height:30px;
-  font-size:18px;
-}
+  </div>  </div>  <!-- APP -->  <div id="appPage" class="hidden">    <div class="card">  
+    <h2>👤 <span id="playerName"></span></h2>  <div class="balance">  
+  💰 <span id="balance">0</span> Ar  
+</div>  
 
-.hidden{
-  display:none;
-}
+<p>🎯 Missions terminées : <b id="done">0</b></p>  
 
-.coins{
-  color:#ffd000;
-}
-</style>
-</head>
+<button onclick="logout()">Déconnexion</button>
 
-<body>
-
-<div class="container">
-
-<h1>🎯 MISSION MADA</h1>
-
-<div class="stats">
-  <div>🏆 Score: <span id="score">0</span></div>
-  <div class="coins">🪙 <span id="coins">0</span></div>
-  <div>❤️ <span id="lives">3</span></div>
+  </div>    <!-- MISSIONS -->    <div class="card">  
+    <h2>🎯 Missions</h2>  <div id="missionsList">  
+  Chargement...  
 </div>
 
-<div class="card">
+  </div>    <!-- RETRAIT -->    <div class="card">  <h2>💸 Demande de retrait</h2>  
 
-<div id="startScreen">
-  <h2>Vonona?</h2>
-  <p>Fenoy ireo missions ary angony ny coins.</p>
+<input  
+  id="withdrawAmount"  
+  type="number"  
+  placeholder="Montant en Ariary"  
+>  
 
-  <button class="start" onclick="startGame()">
-    ▶️ START MISSION
-  </button>
+<select id="withdrawOperator">  
+  <option value="Orange Money">Orange Money</option>  
+  <option value="Airtel Money">Airtel Money</option>  
+  <option value="MVola">MVola</option>  
+</select>  
+
+<input  
+  id="withdrawPhone"  
+  placeholder="Numéro téléphone"  
+  type="tel"  
+>  
+
+<button onclick="withdraw()">Demander le retrait</button>  
+
+<p id="withdrawMsg"></p>
+
+  </div>    <!-- HISTORIQUE -->    <div class="card">  <h2>📋 Mes retraits</h2>  
+
+<div id="history">  
+  Aucun retrait.  
 </div>
 
-<div id="game" class="hidden">
-
-  <h2 id="missionTitle"></h2>
-
-  <div id="timer">10</div>
-
-  <p id="question"></p>
-
-  <button class="answer" onclick="answer(0)" id="a0"></button>
-  <button class="answer" onclick="answer(1)" id="a1"></button>
-  <button class="answer" onclick="answer(2)" id="a2"></button>
-
-  <p id="message"></p>
-
-</div>
-
-<div id="endScreen" class="hidden">
-
-  <h2>🏆 MISSION TERMINÉE</h2>
-
-  <p>Score: <b id="finalScore">0</b></p>
-
-  <p>🪙 Coins: <b id="finalCoins">0</b></p>
-
-  <button class="start" onclick="location.reload()">
-    🔄 REJOUER
-  </button>
-
-</div>
-
-</div>
-</div>
-
-<script>
-
-const missions = [
-
-{
-title:"MISSION 1",
-question:"Iza no renivohitr'i Madagascar?",
-answers:[
-"Antananarivo",
-"Toamasina",
-"Mahajanga"
-],
-correct:0
-},
-
-{
-title:"MISSION 2",
-question:"Iza no biby malaza eto Madagascar?",
-answers:[
-"Lémurien",
-"Panda",
-"Kangourou"
-],
-correct:0
-},
-
-{
-title:"MISSION 3",
-question:"Inona no loko iray hita amin'ny sainam-pirenena Malagasy?",
-answers:[
-"Rouge",
-"Bleu",
-"Vert"
-],
-correct:0
-},
-
-{
-title:"MISSION 4",
-question:"Inona ny vola ampiasaina eto Madagascar?",
-answers:[
-"Ariary",
-"Euro",
-"Dollar"
-],
-correct:0
-},
-
-{
-title:"MISSION 5",
-question:"Iza no nosy lehibe indrindra ao amin'ny Ranomasimbe Indianina?",
-answers:[
-"Madagascar",
-"Maldives",
-"Réunion"
-],
-correct:0
-},
-
-{
-title:"MISSION 6",
-question:"Inona ny fiteny ofisialy iray eto Madagascar?",
-answers:[
-"Malagasy",
-"Espagnol",
-"Allemand"
-],
-correct:0
-}
-
-];
-
-let current=0;
-let score=0;
-let coins=0;
-let lives=3;
-let time=10;
-let timer;
-
-function startGame(){
-
-document.getElementById("startScreen").classList.add("hidden");
-
-document.getElementById("game").classList.remove("hidden");
-
-showMission();
-
-}
-
-function showMission(){
-
-clearInterval(timer);
-
-if(current>=missions.length){
-
-endGame();
-
-return;
-
-}
-
-const m=missions[current];
-
-document.getElementById("missionTitle").textContent=m.title;
-
-document.getElementById("question").textContent=m.question;
-
-document.getElementById("a0").textContent=m.answers[0];
-
-document.getElementById("a1").textContent=m.answers[1];
-
-document.getElementById("a2").textContent=m.answers[2];
-
-document.getElementById("message").textContent="";
-
-time=10;
-
-document.getElementById("timer").textContent=time;
-
-timer=setInterval(()=>{
-
-time--;
-
-document.getElementById("timer").textContent=time;
-
-if(time<=0){
-
-clearInterval(timer);
-
-wrongAnswer("⏰ Fotoana lany!");
-
-}
-
-},1000);
-
-}
-
-function answer(choice){
-
-clearInterval(timer);
-
-const m=missions[current];
-
-if(choice===m.correct){
-
-score++;
-
-coins+=10;
-
-document.getElementById("message").textContent="✅ Marina! +10 🪙";
-
-updateStats();
-
-setTimeout(nextMission,800);
-
-}else{
-
-wrongAnswer("❌ Diso!");
-
-}
-
-}
-
-function wrongAnswer(text){
-
-lives--;
-
-document.getElementById("message").textContent=text;
-
-updateStats();
-
-if(lives<=0){
-
-setTimeout(endGame,800);
-
-}else{
-
-setTimeout(nextMission,800);
-
-}
-
-}
-
-function nextMission(){
-
-current++;
-
-showMission();
-
-}
-
-function updateStats(){
-
-document.getElementById("score").textContent=score;
-
-document.getElementById("coins").textContent=coins;
-
-document.getElementById("lives").textContent=lives;
-
-}
-
-function endGame(){
-
-clearInterval(timer);
-
-document.getElementById("game").classList.add("hidden");
-
-document.getElementById("endScreen").classList.remove("hidden");
-
-document.getElementById("finalScore").textContent=score;
-
-document.getElementById("finalCoins").textContent=coins;
-
-}
-
-</script>
-
-</body>
-</html>
+  </div>  </div>  </div>  <!-- FIREBASE -->  <script type="module">  
+  
+import { initializeApp }  
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";  
+  
+import {  
+  getDatabase,  
+  ref,  
+  set,  
+  get,  
+  push,  
+  update,  
+  onValue  
+}  
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";  
+  
+  
+const firebaseConfig = {  
+  apiKey: "AIzaSyCShJTfIkgFINZM8WJfA_BlaOP1HaImXkA",  
+  authDomain: "task-mada.firebaseapp.com",  
+  databaseURL: "https://task-mada-default-rtdb.firebaseio.com",  
+  projectId: "task-mada",  
+  storageBucket: "task-mada.firebasestorage.app",  
+  messagingSenderId: "55428171899",  
+  appId: "1:55428171899:web:070986217e9042dd16bade",  
+  measurementId: "G-H7H7NF0WX0"  
+};  
+  
+const app = initializeApp(firebaseConfig);  
+const db = getDatabase(app);  
+  
+let currentUser = null;  
+let timerInterval = null;  
+  
+  
+// =========================  
+// REGISTER  
+// =========================  
+  
+window.register = async function(){  
+  
+  const username =  
+    document.getElementById("regUsername").value.trim();  
+  
+  const password =  
+    document.getElementById("regPassword").value.trim();  
+  
+  const msg =  
+    document.getElementById("regMsg");  
+  
+  if(!username || !password){  
+    msg.innerText = "⚠️ Fenoy ny rehetra.";  
+    return;  
+  }  
+  
+  try{  
+  
+    const userRef = ref(db, "users/" + username);  
+  
+    const snapshot = await get(userRef);  
+  
+    if(snapshot.exists()){  
+      msg.innerText = "❌ Efa misy io utilisateur io.";  
+      return;  
+    }  
+  
+    await set(userRef,{  
+      username: username,  
+      password: password,  
+      money: 0,  
+      done: 0,  
+      createdAt: Date.now()  
+    });  
+  
+    msg.innerText =  
+      "✅ Compte créé ! Afaka miditra ianao.";  
+  
+    document.getElementById("regUsername").value="";  
+    document.getElementById("regPassword").value="";  
+  
+  }catch(error){  
+  
+    console.error(error);  
+  
+    msg.innerText =  
+      "❌ Erreur Firebase: " + error.message;  
+  }  
+};  
+  
+  
+// =========================  
+// LOGIN  
+// =========================  
+  
+window.login = async function(){  
+  
+  const username =  
+    document.getElementById("loginUsername").value.trim();  
+  
+  const password =  
+    document.getElementById("loginPassword").value.trim();  
+  
+  const msg =  
+    document.getElementById("loginMsg");  
+  
+  if(!username || !password){  
+    msg.innerText="⚠️ Fenoy ny rehetra.";  
+    return;  
+  }  
+  
+  try{  
+  
+    const userRef = ref(db,"users/"+username);  
+  
+    const snapshot = await get(userRef);  
+  
+    if(!snapshot.exists()){  
+      msg.innerText="❌ Tsy misy io compte io.";  
+      return;  
+    }  
+  
+    const user = snapshot.val();  
+  
+    if(user.password !== password){  
+      msg.innerText="❌ Mot de passe diso.";  
+      return;  
+    }  
+  
+    currentUser = user;  
+  
+    localStorage.setItem(  
+      "madaCurrentUser",  
+      username  
+    );  
+  
+    showApp();  
+  
+  }catch(error){  
+  
+    console.error(error);  
+  
+    msg.innerText =  
+      "❌ Erreur: " + error.message;  
+  }  
+};  
+  
+  
+// =========================  
+// SHOW APP  
+// =========================  
+  
+function showApp(){  
+  
+  document  
+    .getElementById("loginPage")  
+    .classList.add("hidden");  
+  
+  document  
+    .getElementById("appPage")  
+    .classList.remove("hidden");  
+  
+  document.getElementById("playerName")  
+    .innerText=currentUser.username;  
+  
+  updatePlayer();  
+  
+  loadMissions();  
+  
+  loadHistory();  
+}  
+  
+  
+// =========================  
+// PLAYER UPDATE  
+// =========================  
+  
+function updatePlayer(){  
+  
+  document.getElementById("balance")  
+    .innerText =  
+    Number(currentUser.money || 0).toLocaleString();  
+  
+  document.getElementById("done")  
+    .innerText =  
+    Number(currentUser.done || 0);  
+}  
+  
+  
+// =========================  
+// LOAD MISSIONS  
+// =========================  
+  
+function loadMissions(){  
+  
+  const missionsRef = ref(db,"missions");  
+  
+  onValue(missionsRef,(snapshot)=>{  
+  
+    const list =  
+      document.getElementById("missionsList");  
+  
+    list.innerHTML="";  
+  
+    if(!snapshot.exists()){  
+  
+      list.innerHTML =  
+        "<p>Aucune mission disponible.</p>";  
+  
+      return;  
+    }  
+  
+    const missions = snapshot.val();  
+  
+    let index=0;  
+  
+    Object.keys(missions).forEach(id=>{  
+  
+      const mission = missions[id];  
+  
+      index++;  
+  
+      const div =  
+        document.createElement("div");  
+  
+      div.className="mission";  
+  
+      div.innerHTML=`  
+  
+        <h3>🎯 Mission ${index}</h3>  
+  
+        <p>  
+          ${mission.title || "Mission"}  
+        </p>  
+  
+        <p class="small">  
+          ${mission.description || ""}  
+        </p>  
+  
+        <p class="reward">  
+          💰 Récompense :  
+          ${Number(mission.reward || 0).toLocaleString()} Ar  
+        </p>  
+  
+        <p>  
+          ⏱️ Durée :  
+          ${mission.duration || 10} secondes  
+        </p>  
+  
+        <button id="btn-${id}">  
+          Commencer  
+        </button>  
+  
+        <div  
+          id="timer-${id}"  
+          class="timer hidden">  
+        </div>  
+      `;  
+  
+      list.appendChild(div);  
+  
+      document  
+        .getElementById("btn-"+id)  
+        .onclick=()=>startMission(  
+          id,  
+          mission  
+        );  
+  
+    });  
+  
+  });  
+  
+}  
+  
+  
+// =========================  
+// START MISSION  
+// =========================  
+  
+window.startMission = function(id,mission){  
+  
+  const button =  
+    document.getElementById("btn-"+id);  
+  
+  const timer =  
+    document.getElementById("timer-"+id);  
+  
+  button.disabled=true;  
+  
+  timer.classList.remove("hidden");  
+  
+  let seconds =  
+    Number(mission.duration || 10);  
+  
+  timer.innerText=seconds+"s";  
+  
+  clearInterval(timerInterval);  
+  
+  timerInterval=setInterval(()=>{  
+  
+    seconds--;  
+  
+    timer.innerText=seconds+"s";  
+  
+    if(seconds<=0){  
+  
+      clearInterval(timerInterval);  
+  
+      completeMission(  
+        id,  
+        mission  
+      );  
+  
+    }  
+  
+  },1000);  
+  
+};  
+  
+  
+// =========================  
+// COMPLETE MISSION  
+// =========================  
+  
+async function completeMission(id,mission){  
+  
+  try{  
+  
+    const reward =  
+      Number(mission.reward || 0);  
+  
+    const username =  
+      currentUser.username;  
+  
+    const userRef =  
+      ref(db,"users/"+username);  
+  
+    const snapshot =  
+      await get(userRef);  
+  
+    if(!snapshot.exists()) return;  
+  
+    const user =  
+      snapshot.val();  
+  
+    const newMoney =  
+      Number(user.money || 0) + reward;  
+  
+    const newDone =  
+      Number(user.done || 0) + 1;  
+  
+    await update(userRef,{  
+  
+      money:newMoney,  
+  
+      done:newDone  
+  
+    });  
+  
+    currentUser.money=newMoney;  
+    currentUser.done=newDone;  
+  
+    updatePlayer();  
+  
+    const timer =  
+      document.getElementById(  
+        "timer-"+id  
+      );  
+  
+    timer.innerText="✅ Mission terminée !";  
+  
+    const button =  
+      document.getElementById(  
+        "btn-"+id  
+      );  
+  
+    button.disabled=false;  
+  
+  }catch(error){  
+  
+    alert(  
+      "Erreur mission: "  
+      +error.message  
+    );  
+  
+  }  
+  
+}  
+  
+  
+// =========================  
+// WITHDRAW  
+// =========================  
+  
+window.withdraw = async function(){  
+  
+  const amount =  
+    Number(  
+      document.getElementById(  
+        "withdrawAmount"  
+      ).value  
+    );  
+  
+  const operator =  
+    document.getElementById(  
+      "withdrawOperator"  
+    ).value;  
+  
+  const phone =  
+    document.getElementById(  
+      "withdrawPhone"  
+    ).value.trim();  
+  
+  const msg =  
+    document.getElementById(  
+      "withdrawMsg"  
+    );  
+  
+  if(!amount || amount<=0){  
+  
+    msg.innerText =  
+      "⚠️ Montant invalide.";  
+  
+    return;  
+  }  
+  
+  if(!phone){  
+  
+    msg.innerText =  
+      "⚠️ Ampidiro numéro.";  
+  
+    return;  
+  }  
+  
+  if(amount > Number(currentUser.money || 0)){  
+  
+    msg.innerText =  
+      "❌ Tsy ampy ny solde.";  
+  
+    return;  
+  }  
+  
+  try{  
+  
+    const withdrawalRef =  
+      push(ref(db,"withdrawals"));  
+  
+    await set(withdrawalRef,{  
+  
+      username:currentUser.username,  
+  
+      operator:operator,  
+  
+      phone:phone,  
+  
+      amount:amount,  
+  
+      status:"En attente",  
+  
+      createdAt:Date.now()  
+  
+    });  
+  
+    const userRef =  
+      ref(  
+        db,  
+        "users/"+currentUser.username  
+      );  
+  
+    const newBalance =  
+      Number(currentUser.money) - amount;  
+  
+    await update(userRef,{  
+  
+      money:newBalance  
+  
+    });  
+  
+    currentUser.money=newBalance;  
+  
+    updatePlayer();  
+  
+    msg.innerText =  
+      "✅ Demande envoyée. En attente.";  
+  
+    document.getElementById(  
+      "withdrawAmount"  
+    ).value="";  
+  
+    document.getElementById(  
+      "withdrawPhone"  
+    ).value="";  
+  
+    loadHistory();  
+  
+  }catch(error){  
+  
+    console.error(error);  
+  
+    msg.innerText =  
+      "❌ Erreur: "+error.message;  
+  }  
+  
+};  
+  
+  
+// =========================  
+// HISTORY  
+// =========================  
+  
+function loadHistory(){  
+  
+  const historyRef =  
+    ref(db,"withdrawals");  
+  
+  onValue(historyRef,(snapshot)=>{  
+  
+    const box =  
+      document.getElementById("history");  
+  
+    box.innerHTML="";  
+  
+    if(!snapshot.exists()){  
+  
+      box.innerHTML =  
+        "<p>Aucun retrait.</p>";  
+  
+      return;  
+    }  
+  
+    const data =  
+      snapshot.val();  
+  
+    let found=false;  
+  
+    Object.keys(data)  
+      .reverse()  
+      .forEach(id=>{  
+  
+        const item=data[id];  
+  
+        if(  
+          item.username !==  
+          currentUser.username  
+        ) return;  
+  
+        found=true;  
+  
+        const date =  
+          item.createdAt  
+          ? new Date(item.createdAt)  
+              .toLocaleString()  
+          : "";  
+  
+        const div =  
+          document.createElement("div");  
+  
+        div.className="status";  
+  
+        div.innerHTML=`  
+  
+          💸  
+          ${Number(item.amount || 0)  
+            .toLocaleString()} Ar  
+  
+          <br>  
+  
+          📱 ${item.operator}  
+  
+          <br>  
+  
+          ☎️ ${item.phone}  
+  
+          <br>  
+  
+          📌 Statut :  
+          <b>${item.status}</b>  
+  
+          <br>  
+  
+          <span class="small">  
+            ${date}  
+          </span>  
+        `;  
+  
+        box.appendChild(div);  
+  
+      });  
+  
+    if(!found){  
+  
+      box.innerHTML =  
+        "<p>Aucun retrait.</p>";  
+    }  
+  
+  });  
+  
+}  
+  
+  
+// =========================  
+// LOGOUT  
+// =========================  
+  
+window.logout=function(){  
+  
+  localStorage.removeItem(  
+    "madaCurrentUser"  
+  );  
+  
+  currentUser=null;  
+  
+  location.reload();  
+  
+};  
+  
+  
+// =========================  
+// AUTO LOGIN  
+// =========================  
+  
+async function autoLogin(){  
+  
+  const username =  
+    localStorage.getItem(  
+      "madaCurrentUser"  
+    );  
+  
+  if(!username) return;  
+  
+  try{  
+  
+    const snapshot =  
+      await get(  
+        ref(db,"users/"+username)  
+      );  
+  
+    if(snapshot.exists()){  
+  
+      currentUser=snapshot.val();  
+  
+      showApp();  
+  
+    }  
+  
+  }catch(error){  
+  
+    console.error(error);  
+  
+  }  
+  
+}  
+  
+autoLogin();  
+  
+</script>  </body>  
+  </html>
