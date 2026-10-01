@@ -1,164 +1,366 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mission Mada</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .box {
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 25px;
-      background: #222;
-      border-radius: 15px;
-    }
+<title>Mission Mada</title>
 
-    h1 {
-      color: #00ff88;
-    }
+<style>
+*{
+  box-sizing:border-box;
+}
 
-    button {
-      width: 90%;
-      padding: 15px;
-      margin: 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      cursor: pointer;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#101820;
+  color:white;
+  text-align:center;
+}
 
-    .start {
-      background: #00aa66;
-      color: white;
-    }
+.container{
+  max-width:500px;
+  margin:auto;
+  padding:20px;
+}
 
-    .mission {
-      background: #333;
-      color: white;
-    }
+h1{
+  color:#00ff88;
+}
 
-    #message {
-      margin-top: 20px;
-      font-size: 18px;
-      min-height: 30px;
-    }
-  </style>
+.stats{
+  display:flex;
+  justify-content:space-between;
+  background:#1c2730;
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:#202c35;
+  padding:20px;
+  border-radius:18px;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin:8px 0;
+  border:none;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.start{
+  background:#00b86b;
+  color:white;
+}
+
+.answer{
+  background:#354451;
+  color:white;
+}
+
+.answer:active{
+  transform:scale(.98);
+}
+
+#timer{
+  font-size:30px;
+  color:#ffd000;
+  margin:10px;
+}
+
+#message{
+  min-height:30px;
+  font-size:18px;
+}
+
+.hidden{
+  display:none;
+}
+
+.coins{
+  color:#ffd000;
+}
+</style>
 </head>
 
 <body>
 
-<div class="box">
-  <h1>🎯 MISSION MADA</h1>
+<div class="container">
 
-  <p id="intro">
-    Vonona ve ianao hanomboka ny mission?
-  </p>
+<h1>🎯 MISSION MADA</h1>
 
-  <button class="start" onclick="startMission()">
-    START MISSION
+<div class="stats">
+  <div>🏆 Score: <span id="score">0</span></div>
+  <div class="coins">🪙 <span id="coins">0</span></div>
+  <div>❤️ <span id="lives">3</span></div>
+</div>
+
+<div class="card">
+
+<div id="startScreen">
+  <h2>Vonona?</h2>
+  <p>Fenoy ireo missions ary angony ny coins.</p>
+
+  <button class="start" onclick="startGame()">
+    ▶️ START MISSION
+  </button>
+</div>
+
+<div id="game" class="hidden">
+
+  <h2 id="missionTitle"></h2>
+
+  <div id="timer">10</div>
+
+  <p id="question"></p>
+
+  <button class="answer" onclick="answer(0)" id="a0"></button>
+  <button class="answer" onclick="answer(1)" id="a1"></button>
+  <button class="answer" onclick="answer(2)" id="a2"></button>
+
+  <p id="message"></p>
+
+</div>
+
+<div id="endScreen" class="hidden">
+
+  <h2>🏆 MISSION TERMINÉE</h2>
+
+  <p>Score: <b id="finalScore">0</b></p>
+
+  <p>🪙 Coins: <b id="finalCoins">0</b></p>
+
+  <button class="start" onclick="location.reload()">
+    🔄 REJOUER
   </button>
 
-  <div id="game" style="display:none;">
-    <h2 id="missionTitle"></h2>
-    <p id="question"></p>
+</div>
 
-    <button class="mission" onclick="answer(0)" id="a0"></button>
-    <button class="mission" onclick="answer(1)" id="a1"></button>
-    <button class="mission" onclick="answer(2)" id="a2"></button>
-
-    <p id="message"></p>
-    <p id="score">Score : 0</p>
-  </div>
+</div>
 </div>
 
 <script>
+
 const missions = [
-  {
-    title: "MISSION 1",
-    question: "Iza no renivohitr'i Madagascar?",
-    answers: ["Antananarivo", "Toamasina", "Mahajanga"],
-    correct: 0
-  },
-  {
-    title: "MISSION 2",
-    question: "Inona ny ranomasina manodidina an'i Madagascar?",
-    answers: ["Ranomasimbe Indianina", "Ranomasimbe Atlantika", "Ranomasimbe Arktika"],
-    correct: 0
-  },
-  {
-    title: "MISSION 3",
-    question: "Iza amin'ireto no biby malaza eto Madagascar?",
-    answers: ["Lémurien", "Panda", "Kangourou"],
-    correct: 0
-  }
+
+{
+title:"MISSION 1",
+question:"Iza no renivohitr'i Madagascar?",
+answers:[
+"Antananarivo",
+"Toamasina",
+"Mahajanga"
+],
+correct:0
+},
+
+{
+title:"MISSION 2",
+question:"Iza no biby malaza eto Madagascar?",
+answers:[
+"Lémurien",
+"Panda",
+"Kangourou"
+],
+correct:0
+},
+
+{
+title:"MISSION 3",
+question:"Inona no loko iray hita amin'ny sainam-pirenena Malagasy?",
+answers:[
+"Rouge",
+"Bleu",
+"Vert"
+],
+correct:0
+},
+
+{
+title:"MISSION 4",
+question:"Inona ny vola ampiasaina eto Madagascar?",
+answers:[
+"Ariary",
+"Euro",
+"Dollar"
+],
+correct:0
+},
+
+{
+title:"MISSION 5",
+question:"Iza no nosy lehibe indrindra ao amin'ny Ranomasimbe Indianina?",
+answers:[
+"Madagascar",
+"Maldives",
+"Réunion"
+],
+correct:0
+},
+
+{
+title:"MISSION 6",
+question:"Inona ny fiteny ofisialy iray eto Madagascar?",
+answers:[
+"Malagasy",
+"Espagnol",
+"Allemand"
+],
+correct:0
+}
+
 ];
 
-let current = 0;
-let score = 0;
+let current=0;
+let score=0;
+let coins=0;
+let lives=3;
+let time=10;
+let timer;
 
-function startMission() {
-  document.querySelector(".start").style.display = "none";
-  document.getElementById("intro").style.display = "none";
-  document.getElementById("game").style.display = "block";
+function startGame(){
 
-  showMission();
+document.getElementById("startScreen").classList.add("hidden");
+
+document.getElementById("game").classList.remove("hidden");
+
+showMission();
+
 }
 
-function showMission() {
-  const m = missions[current];
+function showMission(){
 
-  document.getElementById("missionTitle").textContent = m.title;
-  document.getElementById("question").textContent = m.question;
+clearInterval(timer);
 
-  document.getElementById("a0").textContent = m.answers[0];
-  document.getElementById("a1").textContent = m.answers[1];
-  document.getElementById("a2").textContent = m.answers[2];
+if(current>=missions.length){
 
-  document.getElementById("message").textContent = "";
+endGame();
+
+return;
+
 }
 
-function answer(choice) {
-  const m = missions[current];
+const m=missions[current];
 
-  if (choice === m.correct) {
-    score++;
-    document.getElementById("message").textContent = "✅ Marina!";
-  } else {
-    document.getElementById("message").textContent = "❌ Diso!";
-  }
+document.getElementById("missionTitle").textContent=m.title;
 
-  document.getElementById("score").textContent =
-    "Score : " + score;
+document.getElementById("question").textContent=m.question;
 
-  setTimeout(() => {
-    current++;
+document.getElementById("a0").textContent=m.answers[0];
 
-    if (current < missions.length) {
-      showMission();
-    } else {
-      endGame();
-    }
-  }, 1000);
+document.getElementById("a1").textContent=m.answers[1];
+
+document.getElementById("a2").textContent=m.answers[2];
+
+document.getElementById("message").textContent="";
+
+time=10;
+
+document.getElementById("timer").textContent=time;
+
+timer=setInterval(()=>{
+
+time--;
+
+document.getElementById("timer").textContent=time;
+
+if(time<=0){
+
+clearInterval(timer);
+
+wrongAnswer("⏰ Fotoana lany!");
+
 }
 
-function endGame() {
-  document.getElementById("game").innerHTML = `
-    <h2>🏆 MISSION TERMINÉE</h2>
-    <p>Score final : ${score} / ${missions.length}</p>
-    <button class="start" onclick="location.reload()">
-      REJOUER
-    </button>
-  `;
+},1000);
+
 }
+
+function answer(choice){
+
+clearInterval(timer);
+
+const m=missions[current];
+
+if(choice===m.correct){
+
+score++;
+
+coins+=10;
+
+document.getElementById("message").textContent="✅ Marina! +10 🪙";
+
+updateStats();
+
+setTimeout(nextMission,800);
+
+}else{
+
+wrongAnswer("❌ Diso!");
+
+}
+
+}
+
+function wrongAnswer(text){
+
+lives--;
+
+document.getElementById("message").textContent=text;
+
+updateStats();
+
+if(lives<=0){
+
+setTimeout(endGame,800);
+
+}else{
+
+setTimeout(nextMission,800);
+
+}
+
+}
+
+function nextMission(){
+
+current++;
+
+showMission();
+
+}
+
+function updateStats(){
+
+document.getElementById("score").textContent=score;
+
+document.getElementById("coins").textContent=coins;
+
+document.getElementById("lives").textContent=lives;
+
+}
+
+function endGame(){
+
+clearInterval(timer);
+
+document.getElementById("game").classList.add("hidden");
+
+document.getElementById("endScreen").classList.remove("hidden");
+
+document.getElementById("finalScore").textContent=score;
+
+document.getElementById("finalCoins").textContent=coins;
+
+}
+
 </script>
 
 </body>
-  </html>
+</html>
