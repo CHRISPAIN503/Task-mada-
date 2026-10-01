@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Mada</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+
+    .box {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 25px;
+      background: #222;
+      border-radius: 15px;
+    }
+
+    h1 {
+      color: #00ff88;
+    }
+
+    button {
+      width: 90%;
+      padding: 15px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .start {
+      background: #00aa66;
+      color: white;
+    }
+
+    .mission {
+      background: #333;
+      color: white;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+      min-height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>🎯 MISSION MADA</h1>
+
+  <p id="intro">
+    Vonona ve ianao hanomboka ny mission?
+  </p>
+
+  <button class="start" onclick="startMission()">
+    START MISSION
+  </button>
+
+  <div id="game" style="display:none;">
+    <h2 id="missionTitle"></h2>
+    <p id="question"></p>
+
+    <button class="mission" onclick="answer(0)" id="a0"></button>
+    <button class="mission" onclick="answer(1)" id="a1"></button>
+    <button class="mission" onclick="answer(2)" id="a2"></button>
+
+    <p id="message"></p>
+    <p id="score">Score : 0</p>
+  </div>
+</div>
+
+<script>
+const missions = [
+  {
+    title: "MISSION 1",
+    question: "Iza no renivohitr'i Madagascar?",
+    answers: ["Antananarivo", "Toamasina", "Mahajanga"],
+    correct: 0
+  },
+  {
+    title: "MISSION 2",
+    question: "Inona ny ranomasina manodidina an'i Madagascar?",
+    answers: ["Ranomasimbe Indianina", "Ranomasimbe Atlantika", "Ranomasimbe Arktika"],
+    correct: 0
+  },
+  {
+    title: "MISSION 3",
+    question: "Iza amin'ireto no biby malaza eto Madagascar?",
+    answers: ["Lémurien", "Panda", "Kangourou"],
+    correct: 0
+  }
+];
+
+let current = 0;
+let score = 0;
+
+function startMission() {
+  document.querySelector(".start").style.display = "none";
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("game").style.display = "block";
+
+  showMission();
+}
+
+function showMission() {
+  const m = missions[current];
+
+  document.getElementById("missionTitle").textContent = m.title;
+  document.getElementById("question").textContent = m.question;
+
+  document.getElementById("a0").textContent = m.answers[0];
+  document.getElementById("a1").textContent = m.answers[1];
+  document.getElementById("a2").textContent = m.answers[2];
+
+  document.getElementById("message").textContent = "";
+}
+
+function answer(choice) {
+  const m = missions[current];
+
+  if (choice === m.correct) {
+    score++;
+    document.getElementById("message").textContent = "✅ Marina!";
+  } else {
+    document.getElementById("message").textContent = "❌ Diso!";
+  }
+
+  document.getElementById("score").textContent =
+    "Score : " + score;
+
+  setTimeout(() => {
+    current++;
+
+    if (current < missions.length) {
+      showMission();
+    } else {
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  document.getElementById("game").innerHTML = `
+    <h2>🏆 MISSION TERMINÉE</h2>
+    <p>Score final : ${score} / ${missions.length}</p>
+    <button class="start" onclick="location.reload()">
+      REJOUER
+    </button>
+  `;
+}
+</script>
+
+</body>
+  </html>
